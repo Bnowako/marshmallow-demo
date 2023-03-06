@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions
 
-class SolutionConverter(val nestedSolutionConverter: NestedSolutionConverter) : Converter<Solution, Document>  {
+class SolutionConverter(private val nestedSolutionConverter: NestedSolutionConverter) : Converter<Solution, Document> {
     override fun convert(source: Solution): Document {
         val dbo = Document()
         dbo["v"] = source.veryLongFieldName
@@ -19,14 +19,25 @@ class SolutionConverter(val nestedSolutionConverter: NestedSolutionConverter) : 
 
 }
 
-class NestedSolutionConverter : Converter<SolutionNestedClass, Document>  {
-    override fun convert(source: SolutionNestedClass): Document? {
+class NestedSolutionConverter : Converter<SolutionNestedClass, Document> {
+    override fun convert(source: SolutionNestedClass): Document {
         val dbo = Document()
         dbo["i"] = source.iAmAlsoVeryLong
         dbo["n"] = source.nestedVeryLongNames
         return dbo
     }
 
+}
+
+class SolutionReadConverter() : Converter<Document, Solution> {
+    override fun convert(source: Document): Solution {
+        //todo add nested converter
+        return Solution(
+            source["v"] as String,
+            source["o"] as String,
+            listOf()
+        )
+    }
 }
 
 @Configuration
@@ -37,6 +48,7 @@ class ConvertersConfig {
         return MongoCustomConversions(
             listOf(
                 SolutionConverter(NestedSolutionConverter()),
+                SolutionReadConverter()
             )
         )
     }

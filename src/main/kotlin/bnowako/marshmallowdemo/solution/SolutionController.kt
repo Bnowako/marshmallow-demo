@@ -1,9 +1,7 @@
 package bnowako.marshmallowdemo.solution
 
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import Solution
+import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/solution")
 @RestController
@@ -18,5 +16,10 @@ class SolutionController(val repository: SolutionRepository) {
                 Solution.getRandom()
             )
         }
+    }
+
+    @GetMapping
+    fun getDocument(): Solution? {
+        return repository.findOne()
     }
 }
