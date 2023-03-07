@@ -31,11 +31,11 @@ class NestedSolutionConverter : Converter<SolutionNestedClass, Document> {
 
 class SolutionReadConverter() : Converter<Document, Solution> {
     override fun convert(source: Document): Solution {
-        //todo add nested converter
+        val l = source["l"] as List<Document>
         return Solution(
             source["v"] as String,
             source["o"] as String,
-            listOf()
+            l.map {SolutionNestedClass(it["i"] as String, it["n"] as String)}
         )
     }
 }
