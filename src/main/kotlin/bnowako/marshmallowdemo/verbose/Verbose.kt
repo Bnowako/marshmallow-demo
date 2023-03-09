@@ -1,7 +1,9 @@
+import bnowako.marshmallowdemo.Slim
 import org.springframework.data.mongodb.core.mapping.Document
 import kotlin.random.Random
 
 @Document
+@Slim
 class Verbose(
     val veryLongFieldName: String,
     val omgHowLongIsThis: String,
